@@ -2,13 +2,13 @@
 FROM maven:3.9.9-eclipse-temurin-17 AS build
 
 WORKDIR /app
-COPY engineering /app
-RUN mvn clean package -DskipTests
+COPY . .
+RUN cd backend/engineering && mvn clean package -DskipTests
 
 # Step 2: Run
 FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
-COPY --from=build /engineering/target/*.jar app.jar
+COPY --from=build /app/backend/engineering/target/*.jar app.jar
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
